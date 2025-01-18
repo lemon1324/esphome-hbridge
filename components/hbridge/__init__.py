@@ -43,10 +43,8 @@ ACTION_SCHEMA = cv.Schema(
 
 @automation.register_action(CONF_OUTPUT_ACTION, OutputAction, ACTION_SCHEMA)
 async def output_action_to_code(config, action_id, template_arg, args):
-    var = cg.new_Pvariable(action_id, template_arg)
-    yield cg.register_parented(var, config[CONF_ID])
-    cg.add(var.set_output(config[CONF_OUTPUT]))
-    yield var
+    paren = await cg.get_variable(config[CONF_ID])
+    return cg.new_Pvariable(action_id, template_arg, paren)
 
 
 # Define how to register the component
