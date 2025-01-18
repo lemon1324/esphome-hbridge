@@ -12,7 +12,7 @@ namespace esphome
         {
             BRAKE = 0,
             COAST = 1
-        }
+        };
 
         class HBridgeComponent : public Component
         {
@@ -37,7 +37,7 @@ namespace esphome
             float output_value_ = 0.0f; // Initialize to 0.0f
             float deadband_ = 0.01f;
 
-            HBridgeDecayMode decay_mode_ = COAST;
+            HBridgeDecayMode decay_mode_{COAST};
         };
 
     } // namespace hbridge

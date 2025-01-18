@@ -43,16 +43,6 @@ namespace esphome
         void HBridgeComponent::dump_config()
         {
             ESP_LOGCONFIG(TAG, "H-Bridge Component:");
-            LOG_PIN("  Pin A: ", output_a_);
-            LOG_PIN("  Pin B: ", output_b_);
-            if (output_enable_ != nullptr)
-            {
-                LOG_PIN("  Enable Pin: ", output_enable_);
-            }
-            else
-            {
-                ESP_LOGCONFIG(TAG, "  Enable Pin: Not used");
-            }
         }
 
         void HBridgeComponent::write_state_()
