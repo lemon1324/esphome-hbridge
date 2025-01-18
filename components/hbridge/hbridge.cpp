@@ -1,6 +1,6 @@
 /**
  * @file hbridge.cpp
- * @author Your Name
+ * @author lemon1324
  * @date 2024-02-14
  * @brief ESPHome 2024 external component to drive an h bridge.
  *
@@ -34,7 +34,7 @@ namespace esphome
             // Optional: Add logic to control the H-Bridge
         }
 
-        void set_output(float output)
+        void HBridgeComponent::set_output(float output)
         {
             output_value_ = output;
             write_state_();
@@ -43,11 +43,11 @@ namespace esphome
         void HBridgeComponent::dump_config()
         {
             ESP_LOGCONFIG(TAG, "H-Bridge Component:");
-            LOG_PIN("  Pin A: ", pin_a_);
-            LOG_PIN("  Pin B: ", pin_b_);
-            if (pin_enable_ != nullptr)
+            LOG_PIN("  Pin A: ", output_a_);
+            LOG_PIN("  Pin B: ", output_b_);
+            if (output_enable_ != nullptr)
             {
-                LOG_PIN("  Enable Pin: ", pin_enable_);
+                LOG_PIN("  Enable Pin: ", output_enable_);
             }
             else
             {
@@ -68,19 +68,19 @@ namespace esphome
                 // Coast mode logic
                 if (clamped_value > deadband_) // forward/coast
                 {
-                    pin_a_->set_level(magnitude);
-                    pin_b_->set_level(0.0f);
+                    output_a_->set_level(magnitude);
+                    output_b_->set_level(0.0f);
                 }
                 else if (clamped_value < -deadband_) // reverse/coast
                 {
-                    pin_a_->set_level(0.0f);
-                    pin_b_->set_level(magnitude);
+                    output_a_->set_level(0.0f);
+                    output_b_->set_level(magnitude);
                 }
                 else // coast
                 {
                     // Zero value: set both pins to 0.0f to coast
-                    pin_a_->set_level(0.0f);
-                    pin_b_->set_level(0.0f);
+                    output_a_->set_level(0.0f);
+                    output_b_->set_level(0.0f);
                 }
             }
             else if (decay_mode_ == HBridgeDecayMode::BRAKE)
@@ -88,19 +88,19 @@ namespace esphome
                 // Brake mode logic
                 if (clamped_value > deadband_) // forward/brake
                 {
-                    pin_a_->set_level(1.0f);
-                    pin_b_->set_level(1.0f - magnitude);
+                    output_a_->set_level(1.0f);
+                    output_b_->set_level(1.0f - magnitude);
                 }
                 else if (clamped_value < -deadband_) // reverse/brake
                 {
-                    pin_a_->set_level(1.0f - magnitude);
-                    pin_b_->set_level(1.0f);
+                    output_a_->set_level(1.0f - magnitude);
+                    output_b_->set_level(1.0f);
                 }
                 else // brake
                 {
                     // Zero value: set both pins to 1.0f to brake
-                    pin_a_->set_level(1.0f);
-                    pin_b_->set_level(1.0f);
+                    output_a_->set_level(1.0f);
+                    output_b_->set_level(1.0f);
                 }
             }
         }

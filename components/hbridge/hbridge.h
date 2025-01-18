@@ -27,7 +27,7 @@ namespace esphome
             void loop() override;
             void dump_config() override;
 
-            void set_output(float output) override;
+            void set_output(float output);
 
         protected:
             output::FloatOutput *output_a_;
