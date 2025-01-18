@@ -1,0 +1,9 @@
+{
+    "version": 1,
+    "components": {
+      "hbridge": {
+        "path": "components/hbridge",
+        "requirements": []
+      }
+    }
+  }
