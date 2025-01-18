@@ -17,6 +17,7 @@
 
 #include "hbridge.h"
 #include "esphome/core/log.h"
+#include "esphome/core/helpers.h"
 
 namespace esphome
 {
@@ -48,7 +49,7 @@ namespace esphome
         void HBridge::write_state_()
         {
             // Clamp the output value between -1.0f and 1.0f
-            float clamped_value = std::clamp(this->output_value_, -1.0f, 1.0f);
+            float clamped_value = esphome::clamp(this->output_value_, -1.0f, 1.0f);
 
             // Get the absolute value of the clamped value
             float magnitude = std::abs(clamped_value);
