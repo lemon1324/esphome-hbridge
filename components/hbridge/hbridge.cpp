@@ -28,6 +28,8 @@ namespace esphome
 
         void HBridge::setup()
         {
+            this->output_value_ = 0.0f;
+            this->write_state_();
         }
 
         void HBridge::loop()
@@ -61,17 +63,20 @@ namespace esphome
                 {
                     this->output_a_->set_level(magnitude);
                     this->output_b_->set_level(0.0f);
+                    ESP_LOGD(TAG, "Forward/Coast: %f", magnitude);
                 }
                 else if (clamped_value < -this->deadband_) // reverse/coast
                 {
                     this->output_a_->set_level(0.0f);
                     this->output_b_->set_level(magnitude);
+                    ESP_LOGD(TAG, "Reverse/Coast: %f", magnitude);
                 }
                 else // coast
                 {
                     // Zero value: set both pins to 0.0f to coast
                     this->output_a_->set_level(0.0f);
                     this->output_b_->set_level(0.0f);
+                    ESP_LOGD(TAG, "Coast");
                 }
             }
             else if (this->decay_mode_ == HBridgeDecayMode::BRAKE)
@@ -81,17 +86,20 @@ namespace esphome
                 {
                     this->output_a_->set_level(1.0f);
                     this->output_b_->set_level(1.0f - magnitude);
+                    ESP_LOGD(TAG, "Forward/Brake: %f", magnitude);
                 }
                 else if (clamped_value < -this->deadband_) // reverse/brake
                 {
                     this->output_a_->set_level(1.0f - magnitude);
                     this->output_b_->set_level(1.0f);
+                    ESP_LOGD(TAG, "Reverse/Brake: %f", magnitude);
                 }
                 else // brake
                 {
                     // Zero value: set both pins to 1.0f to brake
                     this->output_a_->set_level(1.0f);
                     this->output_b_->set_level(1.0f);
+                    ESP_LOGD(TAG, "Brake");
                 }
             }
         }
