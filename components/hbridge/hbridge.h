@@ -47,21 +47,16 @@ namespace esphome
         class OutputAction : public Action<Ts...>
         {
         public:
-            explicit OutputAction(HBridge *parent) : parent_(parent) {}
-
-            void set_output(float output)
-            {
-                this->output_ = output;
-            }
-
+            OutputAction(HBridge *parent) : parent_(parent) {}
+            TEMPLATABLE_VALUE(float, output)
             void play(Ts... x) override
             {
-                this->parent_->set_output(this->output_);
+                float out = this->output_.value(x...);
+                this->parent_->set_output(out);
             }
 
         protected:
             HBridge *parent_;
-            float output_;
         };
 
     } // namespace hbridge
