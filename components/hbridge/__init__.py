@@ -1,7 +1,7 @@
 import esphome.config_validation as cv
 import esphome.codegen as cg
 from esphome.components import output
-from esphome.const import CONF_ID
+from esphome.const import CONF_ID, CONF_DECAY_MODE
 from esphome.core import CORE
 from esphome import automation
 
@@ -9,6 +9,12 @@ from esphome import automation
 hbridge_ns = cg.esphome_ns.namespace("hbridge")
 HBridge = hbridge_ns.class_("HBridge", cg.Component)
 OutputAction = hbridge_ns.class_("OutputAction", automation.Action)
+
+DecayMode = hbridge_ns.enum("HBridgeDecayMode")
+DECAY_MODE_OPTIONS = {
+    "BRAKE": DecayMode.BRAKE,
+    "COAST": DecayMode.COAST,
+}
 
 # Configuration keys
 CONF_OUTPUT_A = "output_a"
@@ -30,6 +36,9 @@ CONFIG_SCHEMA = cv.Schema(
         cv.Optional(CONF_OUTPUT_ENABLE): cv.use_id(
             output.FloatOutput
         ),  # Optional float output for enable
+        cv.Optional(CONF_DECAY_MODE, default="COAST"): cv.enum(
+            DECAY_MODE_OPTIONS, upper=True
+        ),
     }
 ).extend(cv.COMPONENT_SCHEMA)
 
@@ -52,13 +61,16 @@ async def output_action_to_code(config, action_id, template_arg, args):
 
 # Define how to register the component
 async def to_code(config):
-    var = cg.new_Pvariable(config[CONF_ID])  # Declare the component
+    var = cg.new_Pvariable(
+        config[CONF_ID],
+        config[CONF_DECAY_MODE],
+    )
 
-    # Configure output_a
+    await cg.register_component(var, config)
+
     out_a = await cg.get_variable(config[CONF_OUTPUT_A])
     cg.add(var.set_output_a(out_a))
 
-    # Configure output_b
     out_b = await cg.get_variable(config[CONF_OUTPUT_B])
     cg.add(var.set_output_b(out_b))
 
@@ -66,6 +78,3 @@ async def to_code(config):
     if CONF_OUTPUT_ENABLE in config:
         out_enable = await cg.get_variable(config[CONF_OUTPUT_ENABLE])
         cg.add(var.set_output_enable(out_enable))
-
-    # Register the component
-    await cg.register_component(var, config)

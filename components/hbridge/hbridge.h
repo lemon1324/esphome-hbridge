@@ -18,7 +18,8 @@ namespace esphome
         class HBridge : public Component
         {
         public:
-            // Setters for pins
+            HBridge(HBridgeDecayMode decay_mode) : decay_mode_(decay_mode) {}
+
             void set_output_a(output::FloatOutput *output) { output_a_ = output; }
             void set_output_b(output::FloatOutput *output) { output_b_ = output; }
             void set_output_enable(output::FloatOutput *output) { output_enable_ = output; }
