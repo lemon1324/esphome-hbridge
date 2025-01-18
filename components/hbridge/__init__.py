@@ -1,7 +1,7 @@
 import esphome.config_validation as cv
 import esphome.codegen as cg
 from esphome.components import output
-from esphome.const import CONF_ID, CONF_OUTPUT
+from esphome.const import CONF_ID
 from esphome.core import CORE
 from esphome import automation
 
@@ -14,7 +14,8 @@ SetOutputAction = hbridge_ns.class_("SetOutputAction", automation.Action)
 CONF_OUTPUT_A = "output_a"
 CONF_OUTPUT_B = "output_b"
 CONF_OUTPUT_ENABLE = "output_enable"
-CONF_SET_OUTPUT_ACTION = "set_output_action"
+CONF_OUTPUT = "output"
+CONF_SET_OUTPUT_ACTION = "set_output"
 
 # Define the schema for the component
 CONFIG_SCHEMA = cv.Schema(
