@@ -1,5 +1,6 @@
 #pragma once
 
+#include "esphome/core/automation.h"
 #include "esphome/core/component.h"
 #include "esphome/components/output/float_output.h"
 
@@ -14,7 +15,7 @@ namespace esphome
             COAST = 1
         };
 
-        class HBridgeComponent : public Component
+        class HBridge : public Component
         {
         public:
             // Setters for pins
@@ -38,13 +39,15 @@ namespace esphome
             float deadband_ = 0.01f;
 
             HBridgeDecayMode decay_mode_{COAST};
+
+            void write_state_();
         };
 
         template <typename... Ts>
         class OutputAction : public Action<Ts...>
         {
         public:
-            explicit OutputAction(HBridgeComponent *parent) : parent_(parent) {}
+            explicit OutputAction(HBridge *parent) : parent_(parent) {}
 
             void set_output(float output)
             {
@@ -57,7 +60,7 @@ namespace esphome
             }
 
         protected:
-            HBridgeComponent *parent_;
+            HBridge *parent_;
             float output_;
         };
 

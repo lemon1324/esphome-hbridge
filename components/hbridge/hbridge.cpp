@@ -25,27 +25,27 @@ namespace esphome
 
         static const char *TAG = "hbridge";
 
-        void HBridgeComponent::setup()
+        void HBridge::setup()
         {
         }
 
-        void HBridgeComponent::loop()
+        void HBridge::loop()
         {
             // Optional: Add logic to control the H-Bridge
         }
 
-        void HBridgeComponent::set_output(float output)
+        void HBridge::set_output(float output)
         {
             this->output_value_ = output;
             this->write_state_();
         }
 
-        void HBridgeComponent::dump_config()
+        void HBridge::dump_config()
         {
             ESP_LOGCONFIG(TAG, "H-Bridge Component:");
         }
 
-        void HBridgeComponent::write_state_()
+        void HBridge::write_state_()
         {
             // Clamp the output value between -1.0f and 1.0f
             float clamped_value = std::clamp(this->output_value_, -1.0f, 1.0f);
