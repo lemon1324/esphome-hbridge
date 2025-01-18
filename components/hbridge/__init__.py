@@ -8,14 +8,14 @@ from esphome import automation
 # Define the namespace for your component
 hbridge_ns = cg.esphome_ns.namespace("hbridge")
 HBridgeComponent = hbridge_ns.class_("HBridgeComponent", cg.Component)
-SetOutputAction = hbridge_ns.class_("SetOutputAction", automation.Action)
+OutputAction = hbridge_ns.class_("OutputAction", automation.Action)
 
 # Configuration keys
 CONF_OUTPUT_A = "output_a"
 CONF_OUTPUT_B = "output_b"
 CONF_OUTPUT_ENABLE = "output_enable"
 CONF_OUTPUT = "output"
-CONF_SET_OUTPUT_ACTION = "set_output"
+CONF_OUTPUT_ACTION = "hbridge.set_output"
 
 # Define the schema for the component
 CONFIG_SCHEMA = cv.Schema(
@@ -41,8 +41,8 @@ ACTION_SCHEMA = cv.Schema(
 )
 
 
-@automation.register_action(CONF_SET_OUTPUT_ACTION, SetOutputAction, ACTION_SCHEMA)
-def set_output_action_to_code(config, action_id, arg_type, template_arg):
+@automation.register_action(CONF_OUTPUT_ACTION, OutputAction, ACTION_SCHEMA)
+async def output_action_to_code(config, action_id, template_arg, args):
     var = cg.new_Pvariable(action_id, template_arg)
     yield cg.register_parented(var, config[CONF_ID])
     cg.add(var.set_output(config[CONF_OUTPUT]))

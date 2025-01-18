@@ -105,10 +105,10 @@ namespace esphome
             }
         }
 
-        class SetOutputAction : public Action<float>
+        class OutputAction : public Action<float>
         {
         public:
-            SetOutputAction(HBridgeComponent *parent) : parent_(parent) {}
+            OutputAction(HBridgeComponent *parent) : parent_(parent) {}
 
             void set_output(float output)
             {
