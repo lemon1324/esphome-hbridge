@@ -40,5 +40,26 @@ namespace esphome
             HBridgeDecayMode decay_mode_{COAST};
         };
 
+        template <typename... Ts>
+        class OutputAction : public Action<Ts...>
+        {
+        public:
+            explicit OutputAction(HBridgeComponent *parent) : parent_(parent) {}
+
+            void set_output(float output)
+            {
+                this->output_ = output;
+            }
+
+            void play(Ts... x) override
+            {
+                this->parent_->set_output(this->output_);
+            }
+
+        protected:
+            HBridgeComponent *parent_;
+            float output_;
+        };
+
     } // namespace hbridge
 } // namespace esphome

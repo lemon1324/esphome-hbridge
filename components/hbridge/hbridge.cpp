@@ -36,8 +36,8 @@ namespace esphome
 
         void HBridgeComponent::set_output(float output)
         {
-            output_value_ = output;
-            write_state_();
+            this->output_value_ = output;
+            this->write_state_();
         }
 
         void HBridgeComponent::dump_config()
@@ -48,72 +48,52 @@ namespace esphome
         void HBridgeComponent::write_state_()
         {
             // Clamp the output value between -1.0f and 1.0f
-            float clamped_value = std::clamp(output_value_, -1.0f, 1.0f);
+            float clamped_value = std::clamp(this->output_value_, -1.0f, 1.0f);
 
             // Get the absolute value of the clamped value
             float magnitude = std::abs(clamped_value);
 
-            if (decay_mode_ == HBridgeDecayMode::COAST)
+            if (this->decay_mode_ == HBridgeDecayMode::COAST)
             {
                 // Coast mode logic
-                if (clamped_value > deadband_) // forward/coast
+                if (clamped_value > this->deadband_) // forward/coast
                 {
-                    output_a_->set_level(magnitude);
-                    output_b_->set_level(0.0f);
+                    this->output_a_->set_level(magnitude);
+                    this->output_b_->set_level(0.0f);
                 }
-                else if (clamped_value < -deadband_) // reverse/coast
+                else if (clamped_value < -this->deadband_) // reverse/coast
                 {
-                    output_a_->set_level(0.0f);
-                    output_b_->set_level(magnitude);
+                    this->output_a_->set_level(0.0f);
+                    this->output_b_->set_level(magnitude);
                 }
                 else // coast
                 {
                     // Zero value: set both pins to 0.0f to coast
-                    output_a_->set_level(0.0f);
-                    output_b_->set_level(0.0f);
+                    this->output_a_->set_level(0.0f);
+                    this->output_b_->set_level(0.0f);
                 }
             }
-            else if (decay_mode_ == HBridgeDecayMode::BRAKE)
+            else if (this->decay_mode_ == HBridgeDecayMode::BRAKE)
             {
                 // Brake mode logic
-                if (clamped_value > deadband_) // forward/brake
+                if (clamped_value > this->deadband_) // forward/brake
                 {
-                    output_a_->set_level(1.0f);
-                    output_b_->set_level(1.0f - magnitude);
+                    this->output_a_->set_level(1.0f);
+                    this->output_b_->set_level(1.0f - magnitude);
                 }
-                else if (clamped_value < -deadband_) // reverse/brake
+                else if (clamped_value < -this->deadband_) // reverse/brake
                 {
-                    output_a_->set_level(1.0f - magnitude);
-                    output_b_->set_level(1.0f);
+                    this->output_a_->set_level(1.0f - magnitude);
+                    this->output_b_->set_level(1.0f);
                 }
                 else // brake
                 {
                     // Zero value: set both pins to 1.0f to brake
-                    output_a_->set_level(1.0f);
-                    output_b_->set_level(1.0f);
+                    this->output_a_->set_level(1.0f);
+                    this->output_b_->set_level(1.0f);
                 }
             }
         }
-
-        class OutputAction : public Action<float>
-        {
-        public:
-            OutputAction(HBridgeComponent *parent) : parent_(parent) {}
-
-            void set_output(float output)
-            {
-                this->output_ = output;
-            }
-
-            void play(Ts... x) override
-            {
-                parent_->set_output(this->output_);
-            }
-
-        protected:
-            HBridgeComponent *parent_;
-            float output_;
-        };
 
     } // namespace hbridge
 } // namespace esphome
