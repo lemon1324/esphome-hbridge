@@ -105,5 +105,25 @@ namespace esphome
             }
         }
 
+        class SetOutputAction : public Action<float>
+        {
+        public:
+            SetOutputAction(HBridgeComponent *parent) : parent_(parent) {}
+
+            void set_output(float output)
+            {
+                this->output_ = output;
+            }
+
+            void play(Ts... x) override
+            {
+                parent_->set_output(this->output_);
+            }
+
+        protected:
+            HBridgeComponent *parent_;
+            float output_;
+        };
+
     } // namespace hbridge
 } // namespace esphome
