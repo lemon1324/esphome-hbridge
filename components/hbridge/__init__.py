@@ -7,7 +7,7 @@ from esphome import automation
 
 # Define the namespace for your component
 hbridge_ns = cg.esphome_ns.namespace("hbridge")
-HBridgeComponent = hbridge_ns.class_("HBridgeComponent", cg.Component)
+HBridge = hbridge_ns.class_("HBridge", cg.Component)
 OutputAction = hbridge_ns.class_("OutputAction", automation.Action)
 
 # Configuration keys
@@ -20,7 +20,7 @@ CONF_OUTPUT_ACTION = "hbridge.set_output"
 # Define the schema for the component
 CONFIG_SCHEMA = cv.Schema(
     {
-        cv.GenerateID(): cv.declare_id(HBridgeComponent),  # Component ID
+        cv.GenerateID(): cv.declare_id(HBridge),  # Component ID
         cv.Required(CONF_OUTPUT_A): cv.use_id(
             output.FloatOutput
         ),  # Required float output A
@@ -35,7 +35,7 @@ CONFIG_SCHEMA = cv.Schema(
 
 ACTION_SCHEMA = cv.Schema(
     {
-        cv.Required(CONF_ID): cv.use_id(HBridgeComponent),
+        cv.Required(CONF_ID): cv.use_id(HBridge),
         cv.Required(CONF_OUTPUT): cv.templatable(cv.float_),
     }
 )
