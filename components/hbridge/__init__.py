@@ -36,7 +36,7 @@ CONFIG_SCHEMA = cv.Schema(
 ACTION_SCHEMA = cv.Schema(
     {
         cv.Required(CONF_ID): cv.use_id(HBridgeComponent),
-        cv.Required(CONF_OUTPUT): cv.any(cv.lambda_, cv.float_),
+        cv.Required(CONF_OUTPUT): cv.templatable(cv.float_),
     }
 )
 
